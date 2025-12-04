@@ -15,45 +15,52 @@ use App\Http\Controllers\AuthController;
  * =============1================
  * unprotected routes for user registration and login
  */
-
-
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     /**
      * ============2================
      * user logout route
      */
+    Route::post('/logout', [AuthController::class, 'logout']);
 
     /**
      * ============4================
      * bluray API routes
      */
+    Route::apiResource('blurays', BlurayController::class);
 
     /**
      * ============5================
      * dvd API routes
      */
+    Route::apiResource('dvds', DvdController::class);
 
     /**
      * 
      * ============6================
      * cassette API routes
      */
+    Route::apiResource('cassettes', CassetteController::class);
 
     /**
      * ============7================
      * vhs API routes
      */
+    Route::apiResource('vhss', VhsController::class);
 
     /**
      * ============8================
      * vinyl API routes
      */
+    Route::apiResource('vinyls', VinylController::class);
 
     /**
      * ============9================
      * dvd audios API routes
      */
+    Route::apiResource('dvdaudios', DvdaudioController::class);
 
 });
 
