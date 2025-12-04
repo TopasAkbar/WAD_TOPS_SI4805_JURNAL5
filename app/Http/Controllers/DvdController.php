@@ -16,10 +16,10 @@ class DvdController extends Controller
     public function index()
     {
         // ambil semua data dvd
-        // $dvds = ....
+        $dvd = Dvd::all();
 
         // return koleksi dvd
-        // return ....
+        return DvdResource::collection($dvd);
     }
 
     /**
@@ -30,22 +30,26 @@ class DvdController extends Controller
     {
         // Request body berisi title, director dan year
         $validator = Validator::make($request->all(), [
-            
+            'title' => 'required|string|max:255',
+            'director' => 'nullable|string',
+            'year' => 'required|integer|min:0',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                // 'success' => false,
-                // 'errors' => ....
+                'success' => false,
+                'errors' => $validator->errors()
             ], 422);
         }
 
         // Buat data dvd
-        // $dvd = ....
+        $dvd = Dvd::create($validator->validated());
 
         // return dvd yang dibuat sebagai resource
-        // return ....
-
+        return (new DvdResource($dvd))
+                    ->additional(['message' => 'Item created successfully'])
+                    ->response()
+                    ->setStatusCode(201);
     }
 
     /**
@@ -55,17 +59,17 @@ class DvdController extends Controller
     public function show(string $id)
     {
         // Cari data dvd berdasarkan ID
-        // $dvd = ....
+        $dvd = Dvd::find($id);
 
         if (!$dvd) {
             return response()->json([
-                // 'success' => false,
-                // 'message' => ....
+                'success' => false,
+                'message' => 'Item not found'
             ], 404);
         }
 
         // return dvd sebagai resource
-        // return ....
+        return new DvdResource($dvd);
     }
 
     /**
@@ -76,32 +80,37 @@ class DvdController extends Controller
     {
         // Request body berisi title, director dan year
         $validator = Validator::make($request->all(), [
-            
+            'title' => 'sometimes|required|string|max:255',
+            'director' => 'sometimes|nullable|string',
+            'year' => 'sometimes|required|integer|min:0',
         ]);
 
         // Cari data dvd berdasarkan ID
-        // $dvd = ....
+        $dvd = Dvd::find($id);
 
         if (!$dvd) {
             return response()->json([
-                // 'success' => false,
-                // 'message' => ....
+                'success' => false,
+                'message' => 'Item not found'
             ], 404);
         }
 
 
         if ($validator->fails()) {
             return response()->json([
-                // 'success' => false,
-                // 'errors' => ....
+                'success' => false,
+                'errors' => $validator->errors()
             ], 422);
         }
 
         // Update data dvd
-        // $dvd->....
+        $dvd->update($validator->validated());
 
         // return dvd yang diupdate sebagai resource
-        // return ....
+        return (new DvdResource($dvd))
+                    ->additional(['message' => 'Item updated successfully'])
+                    ->response()
+                    ->setStatusCode(200);
     }
 
     /**
@@ -111,19 +120,19 @@ class DvdController extends Controller
     public function destroy(string $id)
     {
         // Cari data dvd berdasarkan ID
-        // $dvd = ....
+        $dvd = Dvd::item($id);
 
         if (!$dvd) {
             return response()->json([
-                // 'success' => false,
-                // 'message' => ....
+                'success' => false,
+                'message' => 'Item not found'
             ], 404);
         }
 
         // Hapus data dvd
-        // $dvd->....
+        $dvd->delete();
 
         // return message sukses
-        // return ....
+        return response()->json(['message' => 'Item deleted successfully'], 200);
     }
 }
