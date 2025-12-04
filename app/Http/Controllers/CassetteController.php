@@ -33,7 +33,7 @@ class CassetteController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'artist' => 'required|string|max:255',
-            'year' => 'required|year',
+            'year' => 'required',
         ]);
 
         if ($validator->fails()) {
