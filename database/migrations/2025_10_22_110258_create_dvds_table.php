@@ -17,6 +17,7 @@ return new class extends Migration
          * id, title, director, year, timestamps
          */
         Schema::create('dvds', function (Blueprint $table) {
+            
 
         });
     }
